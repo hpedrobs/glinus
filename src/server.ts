@@ -1,9 +1,10 @@
 /* internal */
 import clg from '@core/clg'
 import validation from '@core/validation'
-import conset from '@services/conset'
+import acceptCookies from '@services/acceptCookies'
 import login from '@services/login'
 import formNotesReceived from '@services/formNotesReceived'
+import pageQueryNfes from '@services/pageQueryNfes'
 
 /* external */
 import { chromium } from 'playwright'
@@ -14,22 +15,38 @@ import { chromium } from 'playwright'
     const start: Boolean = await validation()
 
     if (start) {
-        const browser = await chromium.launch({ headless: false, slowMo: 1500, timeout: 10000 })
+        const browser = await chromium.launch({
+            headless: false,
+            slowMo: 1500,
+            timeout: 10000
+        })
+
         const page = await browser.newPage()
 
         await page.goto('https://www.economia.go.gov.br/')
 
-        await conset(page)
+        clg('accepting cookies..')
+        await acceptCookies(page)
+        clg('cookies accepted!')
 
+        clg('logging in..')
         await login(page)
+        clg('Login successfully!!!')
 
+        clg('closing modal..')
         await page.frameLocator('iframe[name="iNetaccess"]').locator('text=Ok').click()
+        clg('closed modal!')
 
-        const [pageConsultationNfes] = await Promise.all([
-            page.waitForEvent('popup'),
-            page.frameLocator('iframe[name="iNetaccess"]').locator('text=Baixar XML NFE').click()
-        ])
+        clg('entering the query page..')
+        const pageQuery = await pageQueryNfes(page)
+        clg('entered the query page!')
 
-        await formNotesReceived(pageConsultationNfes)
+        clg('filling out form..')
+        await formNotesReceived(pageQuery)
+        clg('completed form!')
+
+        await pageQuery.waitForTimeout(1500)
+
+        await browser.close()
     }
 })()
