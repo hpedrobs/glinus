@@ -24,9 +24,9 @@ export default async (page: any) : Promise<void> => {
         const isEndDate = checkDate(endDate)
         const isIe = checkIe(ie)
 
-        if (!isStartDate) throw new Error('START_DATE invalid!')
-        if (!isEndDate) throw new Error('END_DATE invalid!')
-        if (!isIe) throw new Error('NUM_IE invalid!')
+        if (!isStartDate) throw new Error('START_DATE')
+        if (!isEndDate) throw new Error('END_DATE')
+        if (!isIe) throw new Error('NUM_IE')
 
         if (isStartDate && isEndDate && isIe) {
             await page.locator('[placeholder="Data inicial"]').click()
@@ -42,12 +42,16 @@ export default async (page: any) : Promise<void> => {
 
             await GoesThroughCaptcha(page)
 
-            // await Promise.all([
-            //     page.waitForNavigation({ waitUntil: 'networkidle', timeout: 500000 }),
-            //     page.click("button[form='filtro']")
-            // ])
+            await Promise.all([
+                page.waitForNavigation({ waitUntil: 'networkidle', timeout: 500000 }),
+                page.click("button[form='filtro']")
+            ])
         }
     } catch (error: any) {
-        clg(error?.message)
+        const msg: any = error?.message
+        if (msg === 'START_DATE') clg('START_DATE invalid!', 'warn')
+        else if (msg === 'END_DATE') clg('END_DATE invalid!', 'warn')
+        else if (msg === 'NUM_IE') clg('NUM_IE invalid!', 'warn')
+        else console.log(error)
     }
 }
