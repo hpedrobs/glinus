@@ -25,6 +25,8 @@
   "dependencies": {
     "colors": "^1.4.0",
     "dotenv": "^16.0.1",
-    "playwright": "^1.22.2"
+    "playwright": "^1.22.2",
+    "promise-poller": "^1.9.1",
+    "request-promise-native": "^1.0.9"
   }
 }
