@@ -5,6 +5,7 @@ import acceptCookies from '@services/acceptCookies'
 import login from '@services/login'
 import formNotesReceived from '@services/formNotesReceived'
 import pageQueryNfes from '@services/pageQueryNfes'
+import checkIfNoResult from '@services/checkIfNoResult'
 
 /* external */
 import { chromium } from 'playwright'
@@ -44,6 +45,8 @@ import { chromium } from 'playwright'
         clg('filling out form..')
         await formNotesReceived(pageQuery)
         clg('completed form!')
+
+        await checkIfNoResult(pageQuery)
 
         await pageQuery.waitForTimeout(1500)
 
