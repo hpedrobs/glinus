@@ -10,7 +10,7 @@ function timeOut (time: number): Promise<string> {
 }
 
 const siteDetails = {
-    sitekey: '8f1iwawi',
+    sitekey: '6LfTFzIUAAAAAKINyrQ9X5LPg4W3iTbyyYKzeUd3',
     pageurl: 'https://nfe.sefaz.go.gov.br/nfeweb/sites/nfe/consulta-publica'
 }
 
