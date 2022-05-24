@@ -6,12 +6,14 @@ import login from '@services/login'
 import formNotesReceived from '@services/formNotesReceived'
 import pageQueryNfes from '@services/pageQueryNfes'
 import checkIfNoResult from '@services/checkIfNoResult'
+import clickDownloadAll from '@services/clickDownloadAll'
+import clickDownloadModal from '@services/clickDownloadModal'
 
 /* external */
 import { chromium } from 'playwright'
 
 ;(async () => {
-    clg('Starting..')
+    clg('Starting..', 'success')
 
     const start: Boolean = await validation()
 
@@ -42,11 +44,22 @@ import { chromium } from 'playwright'
         const pageQuery = await pageQueryNfes(page)
         clg('entered the query page!')
 
+        await page.pause()
+
         clg('filling out form..')
         await formNotesReceived(pageQuery)
         clg('completed form!')
 
-        await checkIfNoResult(pageQuery)
+        clg('check if there are no results..')
+        const result: Boolean = await checkIfNoResult(pageQuery)
+
+        if (result) {
+            clg('click to download..')
+            await clickDownloadAll(pageQuery)
+
+            clg('click for modal download..')
+            await clickDownloadModal(pageQuery)
+        }
 
         await pageQuery.waitForTimeout(1500)
 
