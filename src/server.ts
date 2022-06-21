@@ -7,7 +7,6 @@ import formNotesReceived from '@services/formNotesReceived'
 import pageQueryNfes from '@services/pageQueryNfes'
 import checkIfNoResult from '@services/checkIfNoResult'
 import clickDownloadAll from '@services/clickDownloadAll'
-import clickDownloadModal from '@services/clickDownloadModal'
 
 /* external */
 import { chromium } from 'playwright'
@@ -49,8 +48,7 @@ import { chromium } from 'playwright'
         clg('click to download..')
         await clickDownloadAll(pageQuery)
 
-        clg('click for modal download..')
-        await clickDownloadModal(pageQuery)
+        // await pageQuery.pause()
 
         await pageQuery.waitForTimeout(1500)
 
